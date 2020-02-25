@@ -1,37 +1,39 @@
+//const path = require("path");
 const express = require("express");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
+
+// Load env vars
+dotenv.config({ path: "./.env" });
+
+// Connect to database
+connectDB();
+
+// Route files
+const users = require("./api/routes/users");
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, "build")));
+// Body parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(bodyParser.urlencoded({ extended: false }));
+// Set static folder
+// app.use(express.static(path.join(__dirname, "client")));
 
-// Connect to MongoDB
-mongoose
-  .connect("mongodb://mongo:27017/docker-node-mongo", { useNewUrlParser: true })
-  .then(() => console.log("MongoDB Connected"))
-  .catch(err => console.log(err));
+// Mount routers
+app.use("/api/v1/users", users);
 
-const Item = require("./models/Item");
+const PORT = process.env.PORT || 8080;
 
-app.get("/", function(req, res) {
-  res.sendFile(path.join(__dirname, "build", "index.html"));
+const server = app.listen(
+  PORT,
+  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);
+
+// Handle unhandled promise rejections
+process.on("unhandledRejection", (err, promise) => {
+  console.log(`Error: ${err.message}`.red);
+  // Close server & exit process
+  // server.close(() => process.exit(1));
 });
-
-/* Item.find()
-.then(items => res.render("index", { items }))
-.catch(err => res.status(404).json({ msg: "No items found" })); */
-
-app.post("/item/add", (req, res) => {
-  const newItem = new Item({
-    name: req.body.name
-  });
-
-  newItem.save().then(item => res.redirect("/"));
-});
-
-const port = 8080;
-
-app.listen(port, () => console.log("Server running..."));
