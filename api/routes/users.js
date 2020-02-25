@@ -5,3 +5,5 @@ router
   .route("/users")
   .post(create)
   .get(getAll);
+
+module.exports = router;
