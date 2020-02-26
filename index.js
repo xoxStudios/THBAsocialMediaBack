@@ -2,6 +2,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
+const cors = require("cors");
 
 // Load env vars
 dotenv.config({ path: "./.env" });
@@ -9,26 +10,23 @@ dotenv.config({ path: "./.env" });
 // Connect to database
 connectDB();
 
-// Route files
-const users = require("./api/routes/users");
-
 const app = express();
 
 // Body parser
-app.use(express.json());
+app.use(express.json({ extended: false }));
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
-// Set static folder
-// app.use(express.static(path.join(__dirname, "client")));
-
-// Mount routers
-app.use("/api/v1/users", users);
+app.use("/api/users", require("./routes/users"));
+app.use("/api/auth", require("./routes/auth"));
 
 const PORT = process.env.PORT || 8080;
 
 const server = app.listen(
   PORT,
-  console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+  console.log(
+    `Server running in ${process.env.NODE_ENV} ${process.env.JWT_SECRET} mode on port ${PORT}`
+  )
 );
 
 // Handle unhandled promise rejections
