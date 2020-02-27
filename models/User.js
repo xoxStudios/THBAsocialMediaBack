@@ -21,6 +21,12 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "super"],
     default: "user"
   },
+  groups: {
+    type: Array
+  },
+  posts: {
+    type: Array
+  },
   created_at: {
     type: Date,
     default: Date.now
