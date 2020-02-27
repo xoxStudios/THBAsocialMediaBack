@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 const auth = require("../middleware/auth");
 const { check, validationResult } = require("express-validator");
 const User = require("../models/User");
@@ -33,12 +34,21 @@ router.post(
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { email } = req.body;
-
     try {
+      const { email, password } = req.body;
+
       let user = await User.findOne({ email });
+      let userPassword = await User.findOne({ email }).select("password");
 
       if (!user) {
+        return res.status(400).json({ msg: "Invalid Credentials" });
+      }
+
+      let isValidPassword = await bcrypt.compare(
+        password,
+        userPassword.password
+      );
+      if (!isValidPassword) {
         return res.status(400).json({ msg: "Invalid Credentials" });
       }
 
