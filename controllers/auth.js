@@ -75,11 +75,6 @@ exports.login = asyncHandler(async (req, res) => {
 });
 
 exports.getUser = asyncHandler(async (req, res) => {
-  try {
-    const user = await User.findById(req.user.id).select("-password");
-    res.status(200).json(user);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).send("Server Error");
-  }
+  const user = await User.findById(req.user.id).select("-password");
+  res.status(200).json(user);
 });
