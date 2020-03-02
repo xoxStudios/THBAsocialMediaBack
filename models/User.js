@@ -21,14 +21,8 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "super"],
     default: "user"
   },
-  GroupID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Group"
-  },
-  PostID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Post"
-  },
+  groups: [{ type: mongoose.Schema.Types.ObjectId, ref: "Group" }],
+  posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Post" }],
   created_at: {
     type: Date,
     default: Date.now

@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Group = require("../models/Group");
 const asyncHandler = require("../middleware/asyncHandler");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");

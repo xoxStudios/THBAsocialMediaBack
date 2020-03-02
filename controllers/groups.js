@@ -22,6 +22,24 @@ exports.setGroup = asyncHandler(async (req, res) => {
 });
 
 exports.getGroups = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
-  res.status(200).json(user);
+  Group.find({}, function(err, groups) {
+    var groupMap = {};
+
+    groups.forEach(function(group) {
+      groupMap[group._id] = group;
+    });
+
+    res.status(200).json(groupMap);
+  });
+});
+
+exports.setGroupUserRelation = asyncHandler(async (req, res) => {
+  const { _id } = req.body;
+
+  // check if user exists
+  let group = await Group.findOne({ title: "initial group" });
+
+  group.update({ _id: _id });
+
+  res.status(200).json(group);
 });
