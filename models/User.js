@@ -21,11 +21,13 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "super"],
     default: "user"
   },
-  groups: {
-    type: Array
+  GroupID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Group"
   },
-  posts: {
-    type: Array
+  PostID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post"
   },
   created_at: {
     type: Date,

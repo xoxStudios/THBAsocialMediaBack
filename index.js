@@ -7,6 +7,7 @@ const cors = require("cors");
 dotenv.config({ path: "./.env" });
 connectDB();
 const auth = require("./routes/auth");
+const groups = require("./routes/groups");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/api/auth", auth);
+app.use("/api", groups);
 
 const PORT = process.env.PORT || 8080;
 const server = app.listen(

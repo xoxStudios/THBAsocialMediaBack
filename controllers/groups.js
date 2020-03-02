@@ -6,7 +6,7 @@ exports.setGroup = asyncHandler(async (req, res) => {
   const { title, theme, description } = req.body;
 
   // check if user exists
-  let group = await User.findOne({ title });
+  let group = await Group.findOne({ title });
   if (group) {
     return res.status(400).json({ msg: "Group already exists" });
   }
@@ -18,6 +18,7 @@ exports.setGroup = asyncHandler(async (req, res) => {
   });
 
   await group.save();
+  res.status(200).json(group);
 });
 
 exports.getGroups = asyncHandler(async (req, res) => {

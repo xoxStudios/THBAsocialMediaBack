@@ -1,6 +1,14 @@
 const mongoose = require("mongoose");
 
 const GroupSchema = new mongoose.Schema({
+  UserID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  },
+  PostID: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post"
+  },
   title: {
     type: String,
     required: [true, "Gruppentitel fehlt"]
@@ -12,8 +20,7 @@ const GroupSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, "Gruppenbeschreibung fehlt"],
-    minlength: 8
+    required: [true, "Gruppenbeschreibung fehlt"]
   },
   created_at: {
     type: Date,
